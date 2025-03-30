@@ -39,7 +39,7 @@
       }
 
       textarea {
-        width: inherit;
+        width: 100%;
         height: 50vh;
         font-family: "Instrument Sans", sans-serif;
         margin-block: 10px;
@@ -67,11 +67,40 @@
     </style>
   </head>
   <body>
-    <div class="container">
+    <form id="predict" class="container">
       <h1>Fake News / Article Detector</h1>
-      <textarea type="text" placeholder="Enter your text"></textarea>
+      <label id="textlabel" for="">
+        <textarea
+          type="text"
+          id="text"
+          placeholder="Enter your text"
+          required
+        ></textarea>
+      </label>
       <br />
-      <button>Predict</button>
-    </div>
+      <button type="submit">Predict</button>
+    </form>
   </body>
+  <script>
+    async function handleSubmit(event) {
+      event.preventDefault();
+      const text = document.getElementById("text").value;
+
+      const response = await fetch("/predict", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application.json",
+        },
+        body: JSON.stringify({ text: text }),
+      });
+
+      const result = await response.json();
+
+      if (result.prediction) {
+        alert("Preditiction: " + result.prediction);
+      } else {
+        alert("Error: " + result.error);
+      }
+    }
+  </script>
 </html>
