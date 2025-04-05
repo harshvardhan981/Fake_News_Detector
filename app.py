@@ -1,12 +1,12 @@
 from flask import Flask, request, jsonify, render_template
 import torch
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
+import pickle
+
+with open('model1.pkl', 'rb') as f:
+    model = pickle.load(f)
 
 app = Flask(__name__)
-
-MODEL_PATH = "./fine_tuned_model"  # Adjust the model path if necessary
-tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH)
-model = AutoModelForSequenceClassification.from_pretrained(MODEL_PATH)
 model.eval()
 
 LABELS = {0: "real", 1: "false"}
